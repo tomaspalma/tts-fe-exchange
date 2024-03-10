@@ -7,7 +7,8 @@
     "exchange": "exchange",
     "faqs": "faqs",
     "notfound": "*",
-    "home": "home"
+    "home": "home",
+    "marketplace": "exchange/marketplace"
   },
   "api": {
     "port": 443,

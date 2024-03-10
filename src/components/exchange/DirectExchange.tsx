@@ -1,6 +1,8 @@
 import { CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "../ui/button";
 import { DirectExchangeSelection } from "./DirectExchangeSelection";
+import { Link } from 'react-router-dom';
+import { config, getPath } from "../../utils/utils";
 
 const UCs = [
     { name: "Computação Gráfica", ucClass: "3LEIC01" },
@@ -19,6 +21,7 @@ export function DirectExchange() {
                     <DirectExchangeSelection UC={uc.name} ucClass={uc.ucClass} key={uc.name} />
                 ))
             }
+            <Link to={getPath(config.paths.marketplace)}>Go to Marketplace</Link>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import Layout from './components/layout'
 import StorageAPI from './api/storage'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AboutPage, TimeTableSchedulerPage, ExchangePage, NotFoundPage, FaqsPage } from './pages'
+import { AboutPage, TimeTableSchedulerPage, ExchangePage, NotFoundPage, FaqsPage, MarketplacePage } from './pages'
 import { getPath, config } from './utils/utils'
 import { useDarkMode } from './hooks'
 import { ThemeContext } from './contexts/ThemeContext'
@@ -17,6 +17,7 @@ const pages = [
   { path: getPath(config.paths.exchange), location: 'Exchange', element: ExchangePage, liquid: true },
   { path: getPath(config.paths.faqs), location: 'FAQs', element: FaqsPage, liquid: true },
   { path: getPath(config.paths.notfound), location: 'NotFound', element: NotFoundPage, liquid: true },
+  { path: getPath(config.paths.marketplace), location: 'Marketplace', element: MarketplacePage, liquid: true },
 ]
 
 const redirects = [

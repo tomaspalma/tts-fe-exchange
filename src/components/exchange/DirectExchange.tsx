@@ -8,6 +8,9 @@ import { ToggleMarketplaceSubmissionMode } from "./marketplace/ToggleMarketplace
 import { DirectExchangeContext } from "../../contexts/DirectExchangeContext";
 import { DirectExchangeInfoButton } from "./buttons/DirectExchangeInfoButton";
 import { StudentScheduleContext } from "../../contexts/StudentScheduleContext";
+import { Link } from 'react-router-dom';
+import { config, getPath } from "../../utils/utils";
+import { Button } from "../ui/button";
 
 type Props = {
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
@@ -59,6 +62,9 @@ export function DirectExchange({
                     <MoonLoader className="mx-auto my-auto" loading={isLoadingSchedule} />
                     <p className="text-center">A carregar os horários</p>
                 </div>}
+                <Link to={getPath(config.paths.marketplace)}>
+                    <Button variant="icon" className="h-min w-min flex-grow bg-primary">Go to Marketplace</Button>
+                </Link>
         </div>
     </DirectExchangeContext.Provider>
 }

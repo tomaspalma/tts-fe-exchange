@@ -7,15 +7,18 @@ const BE_CONFIG = Number(prod_val) ? config : dev_config
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || `${BE_CONFIG.api.protocol}://${BE_CONFIG.api.host}:${BE_CONFIG.api.port}${BE_CONFIG.api.pathPrefix}`
 const SEMESTER = process.env.REACT_APP_SEMESTER || getSemester()
 
+export const getApiRoute = (route: string) => {
+    const slash = route[0] === '/' ? '' : '/'
+    return BACKEND_URL + slash + route;
+}
+
 /**
  * Make a request to the backend server.
  * @param route route to be appended to backend url
  * @returns response from the backend
  */
 const apiRequest = async (route: string, method: string, body: FormData | null) => {
-    const slash = route[0] === '/' ? '' : '/'
-
-    const url = BACKEND_URL + slash + route;
+    const url = getApiRoute(route);
 
     const data = await fetch(url, { method: method, body: body, credentials: "include" })
         .then((response) => {
@@ -164,6 +167,10 @@ export const getClassScheduleSigarra = async (course_unit_id: string, class_name
 
 export const getCourseStudents = async (course_unit_id: string) => {
     return await apiRequest(`/students_per_course_unit/${course_unit_id}/`, "GET", null);
+}
+
+export const verifyDirectExchange = async (jwt: string) => {
+    return await apiRequest(`/verify_direct_exchange/${jwt}`, "POST", null);
 }
 
 const api = {

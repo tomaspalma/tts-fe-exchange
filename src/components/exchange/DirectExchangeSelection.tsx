@@ -1,6 +1,6 @@
 "use client"
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { Input } from '../ui/input'
 import { Button } from "../ui/button"
@@ -17,19 +17,19 @@ import {
     PopoverTrigger,
 } from "../ui/popover"
 import { getCourseScheduleSigarra, getCourseStudents } from "../../api/backend"
-import { ClassExchange, CourseOption, ExchangeCourseUnit } from "../../@types"
+import { ExchangeCourseUnit } from "../../@types"
+import { DirectExchangeContext } from "../../contexts/DirectExchangeContext"
+import { ExchangeStudentSelection } from "./ExchangeStudentSelection"
 
 type props = {
-    setCurrentDirectExchange: Dispatch<SetStateAction<Map<string, ClassExchange>>>,
-    currentDirectExchange: Map<string, ClassExchange>,
     uc: ExchangeCourseUnit
 };
 
 export function DirectExchangeSelection({
-    setCurrentDirectExchange,
-    currentDirectExchange,
     uc
 }: props) {
+    const { marketplaceToggled, currentDirectExchange, setCurrentDirectExchange } = useContext(DirectExchangeContext);
+
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
     const [selectedClass, setSelectedClass] = useState<string>("");
@@ -39,7 +39,6 @@ export function DirectExchangeSelection({
     const [students, setStudents] = useState([]);
     const [studentOpen, setStudentOpen] = useState<boolean>(false);
     const [studentValue, setStudentValue] = useState<string>("");
-    const [searchTerm, setSearchTerm] = useState('');
 
     const [ucClasses, setUcClasses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -139,64 +138,18 @@ export function DirectExchangeSelection({
                     </div>
                 </div>
 
-                <div className="flex flex-col space-y-2 w-full">
-                    <span className="font-bold text-sm">Estudante</span>
-                    <div className="flex items-center">
-                        <Popover open={studentOpen} onOpenChange={setStudentOpen}>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    role="combobox"
-                                    aria-expanded={studentOpen}
-                                    className="w-full justify-between"
-                                >
-                                    {studentValue
-                                        ? students.find((student) => student.codigo === studentValue)?.codigo
-                                        : "Escolher estudante..."}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-full p-0 max-h-[215px] overflow-y-auto">
-                                <Command>
-                                    <CommandInput
-                                        className="border-none focus:ring-0"
-                                        placeholder="Procurar estudante..."
-                                        value={searchTerm}
-                                        onValueChange={(newTerm) => setSearchTerm(newTerm)}
-                                    />
-                                    <CommandEmpty>Nenhum estudante encontrado.</CommandEmpty>
-                                    <CommandGroup>
-                                        {students.filter((student) => student.codigo.startsWith(searchTerm)).map((student) => {
-                                            const nameParts = student.nome.split(' ');
-                                            const displayName = `${nameParts[0]} ${nameParts[nameParts.length - 1]}`;
-                                            return (
-                                                <CommandItem
-                                                    className="pl-2"
-                                                    key={student.codigo}
-                                                    value={student.codigo}
-                                                    onSelect={(currentValue) => {
-                                                        setStudent(currentValue);
-                                                        const exchange = currentDirectExchange.get(uc.sigla);
-                                                        exchange.other_student = currentValue;
-                                                        setCurrentDirectExchange(
-                                                            new Map(currentDirectExchange.set(uc.sigla, exchange))
-                                                        )
-                                                        setStudentValue(currentValue === studentValue ? "" : currentValue)
-                                                        setStudentOpen(false)
-                                                    }}
-                                                >
-                                                    <div className="flex flex-col">
-                                                        <div>{student.codigo}</div>
-                                                        <div className="text-gray-600">{displayName}</div>
-                                                    </div>
-                                                </CommandItem>
-                                            )
-                                        })}
-                                    </CommandGroup>
-                                </Command>
-                            </PopoverContent>
-                        </Popover>
-                    </div>
-                </div>
+                {!marketplaceToggled
+                    ? <ExchangeStudentSelection
+                        studentOpen={studentOpen}
+                        setStudentOpen={setStudentOpen}
+                        studentValue={studentValue}
+                        setStudentValue={setStudentValue}
+                        students={students}
+                        student={student}
+                        setStudent={setStudent}
+                        uc={uc}
+                    />
+                    : ""}
             </>
                 :
                 <div className="flex flex-row items-center space-x-2 w-full">

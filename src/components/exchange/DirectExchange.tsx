@@ -7,6 +7,11 @@ import { SessionContext } from "../../contexts/SessionContext";
 import { SubmitDirectExchangeButton } from "./SubmitDirectExchangeButton";
 import { ClassExchange, CourseOption, ExchangeCourseUnit } from "../../@types";
 import { MoonLoader } from "react-spinners";
+import { DirectExchangeInfoButton } from "./buttons/DirectExchangeInfoButton";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
+import { ToggleMarketplaceSubmissionMode } from "./marketplace/ToggleMarketplaceSubmissionMode";
+import { DirectExchangeContext } from "../../contexts/DirectExchangeContext";
 
 type props = {
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
@@ -20,6 +25,7 @@ export function DirectExchange({
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
+    const [marketplaceToggled, setMarketplaceToggled] = useState(false);
 
     const username = localStorage.getItem("username");
 
@@ -88,29 +94,27 @@ export function DirectExchange({
         fetchData();
     }, [username]);
 
-    // if (isLoading) {
-    //     return <p>Loading schedule...</p>;
-    // }
-
     if (error) {
         return <p>Error fetching schedule: {error.message}</p>;
     }
 
-    return <>
+    return <DirectExchangeContext.Provider value={
+        {
+            marketplaceToggled: marketplaceToggled,
+            setMarketplaceToggled: setMarketplaceToggled,
+            currentDirectExchange: currentDirectExchange,
+            setCurrentDirectExchange: setCurrentDirectExchange
+        }}>
         <div className="flex justify-center flex-col space-y-4 mt-4">
-            <Button variant="info" className="w-full">
-                <InformationCircleIcon className="h-5 w-5 mr-2"></InformationCircleIcon>
-                Como funcionam as trocas diretas?
-            </Button>
+            <DirectExchangeInfoButton />
             <SubmitDirectExchangeButton currentDirectExchange={currentDirectExchange} />
+            <ToggleMarketplaceSubmissionMode />
             {!isLoading ?
                 <div>
                     {
                         schedule.map((uc) => {
                             return (
                                 <DirectExchangeSelection
-                                    setCurrentDirectExchange={setCurrentDirectExchange}
-                                    currentDirectExchange={currentDirectExchange}
                                     uc={uc}
                                     key={uc.ucName}
                                 />
@@ -122,5 +126,5 @@ export function DirectExchange({
                     <p className="text-center">A carregar os horários</p>
                 </div>}
         </div>
-    </>;
+    </DirectExchangeContext.Provider>
 }

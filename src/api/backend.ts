@@ -1,4 +1,4 @@
-import { CheckedCourse, Major } from '../@types'
+import { CheckedCourse, ClassExchange, Major } from '../@types'
 import { extraCoursesData } from '../utils/data'
 import { getSemester, config, dev_config } from '../utils/utils'
 
@@ -18,7 +18,13 @@ const apiRequest = async (route: string, method: string, body: FormData | null) 
     const url = BACKEND_URL + slash + route;
 
     const data = await fetch(url, { method: method, body: body, credentials: "include" })
-        .then((response) => response.json())
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                return response
+            }
+        })
         .catch((error) => console.error(error))
 
     return data
@@ -116,6 +122,47 @@ export const login = async (faculty: string, username: string, password: string)
     loginData.append("pv_password", password);
 
     return await apiRequest("/login/", "POST", loginData);
+}
+
+/**
+ * Logout from backend 
+ */
+export const logout = async () => {
+    return await apiRequest("/logout/", "POST", null);
+}
+
+/**
+ * Submit direct exchange request
+*/
+export const submitDirectExchange = async (exchangeChoices: ClassExchange[]) => {
+    const formData = new FormData();
+    for (const choice of exchangeChoices) {
+        formData.append("exchangeChoices[]", JSON.stringify(choice));
+    }
+
+    return await apiRequest("/submit_direct_exchange/", "POST", formData);
+}
+
+/*
+* Get student schedule from sigarra 
+*/
+export const getStudentSchedule = async (username: string) => {
+    return await apiRequest(`/student_schedule/${username}/`, "GET", null);
+}
+
+/**
+ * Get course unit schedules from sigarra
+ */
+export const getCourseScheduleSigarra = async (course_unit_id: string) => {
+    return await apiRequest(`/schedule_sigarra/${course_unit_id}/`, "GET", null);
+}
+
+export const getClassScheduleSigarra = async (course_unit_id: string, class_name: string) => {
+    return await apiRequest(`/class_sigarra_schedule/${course_unit_id}/${class_name}`, "GET", null);
+}
+
+export const getCourseStudents = async (course_unit_id: string) => {
+    return await apiRequest(`/students_per_course_unit/${course_unit_id}/`, "GET", null);
 }
 
 const api = {

@@ -1,8 +1,17 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { DirectExchange } from "./DirectExchange";
+import { Dispatch, SetStateAction } from "react";
+import { CourseOption } from "../../@types";
 
+type Props = {
+    setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
+    courseOptions: CourseOption[]
+}
 
-export const ExchangeSidebar = () => {
+export const ExchangeSidebar = ({
+    setCourseOptions,
+    courseOptions
+}: Props) => {
     return (
         <div className="sidebar">
             <Tabs defaultValue="direta" className="w-full">
@@ -11,7 +20,7 @@ export const ExchangeSidebar = () => {
                     <TabsTrigger value="indireta">Troca indireta</TabsTrigger>
                 </TabsList>
                 <TabsContent value="direta">
-                    <DirectExchange />
+                    <DirectExchange courseOptions={courseOptions} setCourseOptions={setCourseOptions} />
                 </TabsContent>
                 <TabsContent value="indireta"></TabsContent>
             </Tabs>

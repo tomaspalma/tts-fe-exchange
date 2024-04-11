@@ -133,3 +133,8 @@ export type ExchangeCourseUnit = {
     day: number,
     professors
 }
+
+export type DirectExchangeStatus = {
+    class_exchanges: ClassExchange[],
+    status: string,
+}

@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { getStudentHistory, logout } from "../backend";
 
 export function useExchangeHistory(setLoggedIn) {
-    const studentHistory = async () => {
+    const studentHistory = async (a_user) => {
         try {
             const res = await getStudentHistory();
 
@@ -19,7 +19,7 @@ export function useExchangeHistory(setLoggedIn) {
         }
     };
 
-    const { isLoading, isValidating, data, error } = useSWR("", studentHistory, {
+    const { isLoading, isValidating, data, error } = useSWR("data", studentHistory, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });

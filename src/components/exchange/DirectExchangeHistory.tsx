@@ -3,6 +3,7 @@ import { DirectExchangeStatus } from "../../@types";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { MoonLoader } from "react-spinners";
 import { DirectExchangeStatusCard } from "./DirectExchangeStatusCard"
 import { SessionContext } from "../../contexts/SessionContext";
 import { useExchangeHistory } from "../../api/hooks/useExchangeHistory";
@@ -52,7 +53,8 @@ export const DirectExchangeHistoryButton = () => {
         isValidating: isValidatingHistory
     } = useExchangeHistory(loggedIn);
 
-    console.log(history);
+    if(!isLoadingHistory)
+        console.log(history);
 
     return <>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -72,26 +74,32 @@ export const DirectExchangeHistoryButton = () => {
                         troca se efetue de facto.
                     </DialogDescription>
                 </DialogHeader>
-                <Tabs defaultValue="pending" className="w-full overflow-scroll">
-                    <TabsList className="grid w-full grid-cols-2 border border-black">
-                        <TabsTrigger value="pending">Pending</TabsTrigger>
-                        <TabsTrigger value="accepted">Aceites</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="pending">
-                        <div className="flex flex-col space-y-2"> {
-                            test.filter((test_1) => test_1.status === "pending").map((test_1) => (
-                                <DirectExchangeStatusCard exchange={test_1} />
-                            ))
-                        }</div>
-                    </TabsContent>
-                    <TabsContent className="" value="accepted">
-                        <div className="flex flex-col space-y-2"> {
-                            test.filter((test_1) => test_1.status === "accepted").map((test_1) => (
-                                <DirectExchangeStatusCard exchange={test_1} />
-                            ))
-                        }</div>
-                    </TabsContent>
-                </Tabs>
+                {!isLoadingHistory ? 
+
+                    <Tabs defaultValue="pending" className="w-full overflow-scroll">
+                        <TabsList className="grid w-full grid-cols-2 border border-black">
+                            <TabsTrigger value="pending">Pending</TabsTrigger>
+                            <TabsTrigger value="accepted">Aceites</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="pending">
+                            <div className="flex flex-col space-y-2"> {
+                                test.filter((test_1) => test_1.status === "pending").map((test_1) => (
+                                    <DirectExchangeStatusCard exchange={test_1} />
+                                ))
+                            }</div>
+                        </TabsContent>
+                        <TabsContent className="" value="accepted">
+                            <div className="flex flex-col space-y-2"> {
+                                test.filter((test_1) => test_1.status === "accepted").map((test_1) => (
+                                    <DirectExchangeStatusCard exchange={test_1} />
+                                ))
+                            }</div>
+                        </TabsContent>
+                    </Tabs> : <div className="mt-4">
+                        <MoonLoader className="mx-auto my-auto" loading={isLoadingHistory} />
+                        <p className="text-center">A carregar os horários</p>
+                    </div>
+                }
             </DialogContent>
         </Dialog>
     </>

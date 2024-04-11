@@ -7,7 +7,7 @@ import { DirectExchangeStatusCard } from "./DirectExchangeStatusCard"
 import { SessionContext } from "../../contexts/SessionContext";
 import { useExchangeHistory } from "../../api/hooks/useExchangeHistory";
 
-const test : DirectExchangeStatus[] = [
+const test: DirectExchangeStatus[] = [
     {
         class_exchanges: [
             {
@@ -45,13 +45,12 @@ const test : DirectExchangeStatus[] = [
 
 export const DirectExchangeHistoryButton = () => {
     const [open, setOpen] = useState<boolean>(false);
-    const username = localStorage.getItem("username");
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const {
         data: history,
         isLoading: isLoadingHistory,
         isValidating: isValidatingHistory
-    } = useExchangeHistory(username, loggedIn);
+    } = useExchangeHistory(loggedIn);
 
     console.log(history);
 
@@ -81,14 +80,14 @@ export const DirectExchangeHistoryButton = () => {
                     <TabsContent value="pending">
                         <div className="flex flex-col space-y-2"> {
                             test.filter((test_1) => test_1.status === "pending").map((test_1) => (
-                                <DirectExchangeStatusCard exchange={test_1}/>
+                                <DirectExchangeStatusCard exchange={test_1} />
                             ))
                         }</div>
                     </TabsContent>
                     <TabsContent className="" value="accepted">
                         <div className="flex flex-col space-y-2"> {
                             test.filter((test_1) => test_1.status === "accepted").map((test_1) => (
-                                <DirectExchangeStatusCard exchange={test_1}/>
+                                <DirectExchangeStatusCard exchange={test_1} />
                             ))
                         }</div>
                     </TabsContent>

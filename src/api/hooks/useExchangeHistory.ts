@@ -1,10 +1,10 @@
 import useSWR from "swr";
 import { getStudentHistory, logout } from "../backend";
 
-export function useExchangeHistory(username, setLoggedIn) {
-    const studentHistory = async (username: string) => {
+export function useExchangeHistory(setLoggedIn) {
+    const studentHistory = async () => {
         try {
-            const res = await getStudentHistory(username);
+            const res = await getStudentHistory();
 
             if (!res.ok) {
                 if (res.status === 403) {
@@ -19,7 +19,7 @@ export function useExchangeHistory(username, setLoggedIn) {
         }
     };
 
-    const { isLoading, isValidating, data, error } = useSWR(username, studentHistory, {
+    const { isLoading, isValidating, data, error } = useSWR("", studentHistory, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });

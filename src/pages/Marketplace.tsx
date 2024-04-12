@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import { Button} from '../components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../components/ui/tooltip';
 
 const ExchangeDetail = ({ exchangeDetail }) => (
     <div className="flex flex-col space-y-2 w-full mb-2">
@@ -38,13 +38,33 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Button
-                variant="icon"
-                className="h-min w-min flex-grow bg-primary"
-                onClick={() => searchInputRef.current.focus()}
-            >
-                <MagnifyingGlassIcon className="h-5 w-5" />
-            </Button>
+            <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="icon"
+                            className="h-min w-min flex-grow bg-primary mr-2"
+                            onClick={() => searchInputRef.current.focus()}
+                        >
+                            <MagnifyingGlassIcon className="h-5 w-5" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Pesquisar</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="icon"
+                            className="h-min w-min flex-grow bg-secondary"
+                        >
+                            <FunnelIcon className="h-5 w-5" /> 
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Filtrar pesquisa</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
         </div>
     );
 };

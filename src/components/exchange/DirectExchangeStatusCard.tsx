@@ -17,7 +17,7 @@ export const DirectExchangeStatusCard = ({
         <span className={text_color}>{text}</span>
         {
             class_exchanges.map((class_exchange) => (
-                <div className="flex justify-around border rounded-md border-black">
+                <div className="flex justify-around border rounded-md border-black" key={class_exchange.course_unit}>
                     <div className="flex flex-col space-y-2">
                         <span className="font-bold text-center">{class_exchange.course_unit}</span>
                         <div className="flex flex-end">

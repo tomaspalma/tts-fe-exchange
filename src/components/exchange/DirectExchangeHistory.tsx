@@ -8,100 +8,14 @@ import { DirectExchangeStatusCard } from "./DirectExchangeStatusCard"
 import { SessionContext } from "../../contexts/SessionContext";
 import { useExchangeHistory } from "../../api/hooks/useExchangeHistory";
 
-const test: DirectExchangeStatus[] = [
-    {
-        id: 1,
-        class_exchanges: [
-            {
-                course_unit: "IA",
-                old_class: "LEIC01",
-                new_class: "LEIC02",
-                other_student: "202100000"
-            },
-            {
-                course_unit: "CPD",
-                old_class: "LEIC01",
-                new_class: "LEIC02",
-                other_student: "202100000"
-            }
-        ],
-        status: "pending"
-    },
-    {
-        id: 2,
-        class_exchanges: [
-            {
-                course_unit: "IA",
-                old_class: "LEIC01",
-                new_class: "LEIC02",
-                other_student: "202100000"
-            },
-            {
-                course_unit: "CPD",
-                old_class: "LEIC01",
-                new_class: "LEIC02",
-                other_student: "202100000"
-            }
-        ],
-        status: "accepted"
-    }];
-
-function directExchangeFromAPI(history: string) : DirectExchangeStatus[]  {
-    let obj = JSON.parse(history).map((obj) => obj["fields"]);
-    let exchanges_map = new Map();
-    let exchanges : DirectExchangeStatus[] = [];
-
-    for(let exchangeParticipation of obj) {
-        let id = exchangeParticipation["direct_exchange"];
-        let exchange : ClassExchange = {
-            course_unit: exchangeParticipation["course_unit"],
-            old_class: exchangeParticipation["old_class"],
-            new_class: exchangeParticipation["new_class"],
-            other_student: "unknown"
-        };
-
-        if(exchanges_map.get(id)) {
-            exchanges_map.get(id)["class_exchanges"].push(exchange);
-        } else {
-            exchanges_map.set(
-                id,
-                {
-                    id: id,
-                    class_exchanges: [exchange],
-                    status: "pending"
-                }
-            )
-        }
-
-    }
-
-    for(let value of exchanges_map.values()) {
-        exchanges.push(
-            {
-                id: value.id,
-                class_exchanges: value.class_exchanges,
-                status: value.status
-            }
-        )
-    }
-
-    return exchanges;
-}
-
 export const DirectExchangeHistoryButton = () => {
     const [open, setOpen] = useState<boolean>(false);
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const {
-        data: history,
+        data: exchanges,
         isLoading: isLoadingHistory,
         isValidating: isValidatingHistory
     } = useExchangeHistory(loggedIn);
-
-    let exchanges : DirectExchangeStatus[] = [];
-    if(!isLoadingHistory) {
-        exchanges = directExchangeFromAPI(history);
-        console.log(exchanges);
-    }
 
     return <>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -130,15 +44,15 @@ export const DirectExchangeHistoryButton = () => {
                         </TabsList>
                         <TabsContent value="pending">
                             <div className="flex flex-col space-y-2"> {
-                                exchanges.filter((test_1) => test_1.status === "pending").map((test_1) => (
-                                    <DirectExchangeStatusCard exchange={test_1} />
+                                exchanges.filter((exchange) => exchange.status === "pending").map((exchange) => (
+                                    <DirectExchangeStatusCard key={exchange.id} exchange={exchange} />
                                 ))
                             }</div>
                         </TabsContent>
                         <TabsContent className="" value="accepted">
                             <div className="flex flex-col space-y-2"> {
-                                exchanges.filter((test_1) => test_1.status === "accepted").map((test_1) => (
-                                    <DirectExchangeStatusCard exchange={test_1} />
+                                exchanges.filter((exchange) => exchange.status === "accepted").map((exchange) => (
+                                    <DirectExchangeStatusCard key={exchange.id} exchange={exchange} />
                                 ))
                             }</div>
                         </TabsContent>

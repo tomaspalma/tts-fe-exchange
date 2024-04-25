@@ -29,28 +29,25 @@ export const DirectExchangeHistoryButton = () => {
             </DialogTrigger>
             <DialogContent className="h-5/6 content-start">
                 <DialogHeader className="">
-                    <DialogTitle className="text-center">Confirmação de sumbissão de troca direta</DialogTitle>
-                    <DialogDescription className="text-center">
-                        Após a submissão, tanto tu como o estudante com o qual especificaste na troca terão de clicar num link de confirmação para que a
-                        troca se efetue de facto.
-                    </DialogDescription>
+                    <DialogTitle className="text-center">Histórico de trocas direta</DialogTitle>
+                    <DialogDescription className="text-center"></DialogDescription>
                 </DialogHeader>
                 {!isLoadingHistory ? 
 
                     <Tabs defaultValue="pending" className="w-full overflow-scroll">
                         <TabsList className="grid w-full grid-cols-2 border border-black">
-                            <TabsTrigger value="pending">Pending</TabsTrigger>
+                            <TabsTrigger value="pending">Pendente</TabsTrigger>
                             <TabsTrigger value="accepted">Aceites</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="pending">
-                            <div className="flex flex-col space-y-2"> {
+                        <TabsContent className="p-2" value="pending">
+                            <div className="flex flex-col space-y-4"> {
                                 exchanges.filter((exchange) => exchange.status === "pending").map((exchange) => (
                                     <DirectExchangeStatusCard key={exchange.id} exchange={exchange} />
                                 ))
                             }</div>
                         </TabsContent>
-                        <TabsContent className="" value="accepted">
-                            <div className="flex flex-col space-y-2"> {
+                        <TabsContent className="p-2" value="accepted">
+                            <div className="flex flex-col space-y-4"> {
                                 exchanges.filter((exchange) => exchange.status === "accepted").map((exchange) => (
                                     <DirectExchangeStatusCard key={exchange.id} exchange={exchange} />
                                 ))

@@ -49,7 +49,7 @@ export function DirectExchangeSelection({
     const [ucClasses, setUcClasses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    console.log("UC: ", {...uc})
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -59,6 +59,7 @@ export function DirectExchangeSelection({
 
                 const studentsData = await getCourseStudents(uc.code);
                 setStudents(studentsData);
+                
             } catch (err) {
                 setError(err);
             } finally {

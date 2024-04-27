@@ -166,6 +166,10 @@ export const getCourseStudents = async (course_unit_id: string) => {
     return await apiRequest(`/students_per_course_unit/${course_unit_id}/`, "GET", null);
 }
 
+export const getMarketPlaceExchanges = async () => {
+    return await apiRequest(`/marketplace_exchange/`, "GET", null);
+}
+
 const api = {
     getMajors,
     getCourses,

@@ -140,7 +140,7 @@ export const submitDirectExchange = async (exchangeChoices: ClassExchange[], mar
         formData.append("exchangeChoices[]", JSON.stringify(choice));
     }
 
-    const endpoint = marketplaceSubmission ? "/submit_markeplace_exchange" : "/submit_direct_exchange/";
+    const endpoint = marketplaceSubmission ? "/submit_marketplace_exchange/" : "/submit_direct_exchange/";
     return await apiRequest(endpoint, "POST", formData);
 }
 

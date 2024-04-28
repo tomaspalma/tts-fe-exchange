@@ -1,10 +1,12 @@
-import React, { useState, useRef, Fragment, useEffect } from 'react';
+import React, { useState, useRef, Fragment, useEffect, useContext } from 'react';
 import { ArrowRightIcon, MagnifyingGlassIcon, FunnelIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Button} from '../components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../components/ui/tooltip';
 import { Dialog, Transition } from '@headlessui/react';
 import Alert, { AlertType } from '../components/planner/Alert';
 import classNames from 'classnames'
+import { SessionContext } from '../contexts/SessionContext';
+import { useMarketplaceExchange } from '../api/hooks/useMarketplaceExchange';
 
 const ExchangeDetail = ({ exchangeDetail }) => (
     <div className="flex flex-col space-y-2 w-full mb-2">
@@ -188,6 +190,7 @@ const FilterDialog = ({ isOpen, closeModal, selectedUCs, handleCheckboxChange, h
 
 const MarketplacePage = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const [selectedUCs, setSelectedUCs] = useState({
         'Compiladores': false,
         'Inteligência Artificial': false,
@@ -195,43 +198,25 @@ const MarketplacePage = () => {
         'Computação Gráfica': false
     });
 
-    const marketplaceExchanges = [
-        {
-            studentName: 'Pedro Oliveira',
-            exchanges: [
-                { course: 'Inteligência Artificial', from: '3LEIC04', to: '3LEIC02' },
-                { course: 'Computação Paralela e Distribuída', from: '3LEIC04', to: '3LEIC02' }
-            ]
-        },
-        {
-            studentName: 'João Fernades',
-            exchanges: [
-                { course: 'Compiladores', from: '3LEIC02', to: '3LEIC08' }
-            ]
-        },
-        {
-            studentName: 'Tomás Palma',
-            exchanges: [
-                { course: 'Inteligência Artificial', from: '3LEIC01', to: '3LEIC06' },
-                { course: 'Computação Paralela e Distribuída', from: '3LEIC01', to: '3LEIC06' },
-                { course: 'Compiladores', from: '3LEIC01', to: '3LEIC06' }
-            ]
-        },
-        {
-            studentName: 'Eduardo Oliveira',
-            exchanges: [
-                { course: 'Competências Transversais: Comunicação Profissional', from: '3LEIC01', to: '3LEIC06' }
-            ]
-        }        
-    ];
+    const { data: marketplaceExchanges, isLoading, error } = useMarketplaceExchange(loggedIn);
+
+    useEffect(() => {
+        if (error) {
+            console.error(error);
+        }
+    }, [error]);
+
+    if (isLoading) {
+        return <div>Loading...</div>; 
+    }
 
     const filteredExchanges = marketplaceExchanges.filter(exchange =>
-        exchange.exchanges.some(detail =>
-            (detail.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            detail.from.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            detail.to.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            exchange.studentName.toLowerCase().includes(searchTerm.toLowerCase())) &&
-            (Object.values(selectedUCs).every(val => !val) || exchange.exchanges.some(detail => selectedUCs[detail.course]))
+        exchange.class_exchanges.some(detail =>
+            (detail.course_unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            detail.old_class.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            detail.new_class.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            exchange.issuer.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            (Object.values(selectedUCs).every(val => !val) || exchange.class_exchanges.some(detail => selectedUCs[detail.course_unit]))
         )
     );
 
@@ -239,9 +224,17 @@ const MarketplacePage = () => {
         <div className="p-4">
             <div className="flex flex-col items-center w-full justify-between space-y-4 border-2 border-gray-200 shadow-sm bg-white p-4 rounded-md">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} selectedUCs={selectedUCs} setSelectedUCs={setSelectedUCs} />
-                {filteredExchanges.map((exchange) => (
-                    <Exchange key={exchange.studentName} exchange={exchange} />
-                ))}
+                {filteredExchanges.length > 0 ? (
+                    filteredExchanges.map((exchange) => (
+                        <Exchange key={exchange.id} exchange={exchange} />
+                    ))
+                ) : (
+                    <div className="flex flex-col items-center w-full justify-between space-y-4">
+                        <Alert type={AlertType.info}>
+                            Ainda não foram submetidas trocas no marketplace
+                        </Alert>
+                    </div>
+                )}
             </div>
         </div>
     );

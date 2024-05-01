@@ -1,16 +1,16 @@
 import useSWR from "swr";
-import { getMarketPlaceExchanges, logout } from "../backend";
+import { getMarketPlaceExchanges, logout} from "../backend";
 
 export function useMarketplaceExchange(setLoggedIn) {
     const fetchMarketplaceExchanges = async () => {
         try {
             const res = await getMarketPlaceExchanges();
 
-            if (!res.ok) {
-                if (res.status === 403) {
-                    await logout();
-                    setLoggedIn(false);
-                }
+            // console.log(res);
+
+            if (res.status === 403) {
+                await logout();
+                setLoggedIn(false);
             }
 
             return res;

@@ -10,22 +10,22 @@ import { useMarketplaceExchange } from '../api/hooks/useMarketplaceExchange';
 
 const ExchangeDetail = ({ exchangeDetail }) => (
     <div className="flex flex-col space-y-2 w-full mb-2">
-        <div className="font-bold text-left">{exchangeDetail.course}</div>
+        <div className="font-bold text-left">{exchangeDetail.course_unit}</div>
         <div className="flex flex-row items-center space-x-2 w-full">
-            <input disabled type="text" className="w-1/2 disabled:cursor-default disabled:opacity-100 placeholder:text-black dark:placeholder:text-white border-gray-200 rounded-md" placeholder={exchangeDetail.from}></input>
+            <input disabled type="text" className="w-1/2 disabled:cursor-default disabled:opacity-100 placeholder:text-black dark:placeholder:text-white border-gray-200 rounded-md" placeholder={exchangeDetail.old_class}></input>
             <span>
                 <ArrowRightIcon className="h-5 w-full"></ArrowRightIcon>
             </span>
-            <input disabled type="text" className="w-1/2 disabled:cursor-default disabled:opacity-100 placeholder:text-black dark:placeholder:text-white border-gray-200 rounded-md" placeholder={exchangeDetail.to}></input>
+            <input disabled type="text" className="w-1/2 disabled:cursor-default disabled:opacity-100 placeholder:text-black dark:placeholder:text-white border-gray-200 rounded-md" placeholder={exchangeDetail.new_class}></input>
         </div>
     </div>
 );
 
 const Exchange = ({ exchange }) => (
     <div className="border-2 border-gray-200 shadow-sm bg-white p-4 rounded-md w-1/4">
-        <h3 className="font-bold text-lg text-center">{exchange.studentName}</h3>
-        {exchange.exchanges.map((exchangeDetail) => (
-            <ExchangeDetail key={exchangeDetail.course} exchangeDetail={exchangeDetail} />
+        <h3 className="font-bold text-lg text-center">{exchange.issuer}</h3>
+        {exchange.class_exchanges.map((exchangeDetail) => (
+            <ExchangeDetail key={exchangeDetail.course_unit} exchangeDetail={exchangeDetail} />
         ))}
     </div>
 );
@@ -210,7 +210,7 @@ const MarketplacePage = () => {
         return <div>Loading...</div>; 
     }
 
-    const filteredExchanges = marketplaceExchanges.filter(exchange =>
+    const filteredExchanges = marketplaceExchanges && marketplaceExchanges.filter(exchange =>
         exchange.class_exchanges.some(detail =>
             (detail.course_unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
             detail.old_class.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -7,6 +7,7 @@ import Alert, { AlertType } from '../components/planner/Alert';
 import classNames from 'classnames'
 import { SessionContext } from '../contexts/SessionContext';
 import { useMarketplaceExchange } from '../api/hooks/useMarketplaceExchange';
+import { getStudentData } from '../api/backend';
 
 const ExchangeDetail = ({ exchangeDetail }) => (
     <div className="flex flex-col space-y-2 w-full mb-2">
@@ -21,9 +22,9 @@ const ExchangeDetail = ({ exchangeDetail }) => (
     </div>
 );
 
-const Exchange = ({ exchange }) => (
+const Exchange = ({ exchange, studentData }) => (
     <div className="border-2 border-gray-200 shadow-sm bg-white p-4 rounded-md w-1/4">
-        <h3 className="font-bold text-lg text-center">{exchange.issuer}</h3>
+        <h3 className="font-bold text-lg text-center">{studentData[exchange.issuer]}</h3>
         {exchange.class_exchanges.map((exchangeDetail) => (
             <ExchangeDetail key={exchangeDetail.course_unit} exchangeDetail={exchangeDetail} />
         ))}
@@ -191,6 +192,7 @@ const FilterDialog = ({ isOpen, closeModal, selectedUCs, handleCheckboxChange, h
 const MarketplacePage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
+    const [studentData, setStudentData] = useState({});
     const [selectedUCs, setSelectedUCs] = useState({
         'Compiladores': false,
         'Inteligência Artificial': false,
@@ -199,6 +201,23 @@ const MarketplacePage = () => {
     });
 
     const { data: marketplaceExchanges, isLoading, error } = useMarketplaceExchange(loggedIn);
+
+    useEffect(() => {
+        if (marketplaceExchanges) {
+            const fetchStudentData = async () => {
+                const newStudentData = {};
+                for (let exchange of marketplaceExchanges) {
+                    const data = await getStudentData(exchange.issuer);
+                    const fullName = data.nome.split(' ');
+                    const firstName = fullName[0];
+                    const lastName = fullName[fullName.length - 1];
+                    newStudentData[exchange.issuer] = `${firstName} ${lastName}`;
+                }
+                setStudentData(newStudentData);
+            };
+            fetchStudentData();
+        }
+    }, [marketplaceExchanges]);
 
     useEffect(() => {
         if (error) {
@@ -226,7 +245,7 @@ const MarketplacePage = () => {
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} selectedUCs={selectedUCs} setSelectedUCs={setSelectedUCs} />
                 {filteredExchanges.length > 0 ? (
                     filteredExchanges.map((exchange) => (
-                        <Exchange key={exchange.id} exchange={exchange} />
+                        <Exchange key={exchange.id} exchange={exchange} studentData={studentData} />
                     ))
                 ) : (
                     <div className="flex flex-col items-center w-full justify-between space-y-4">

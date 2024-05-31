@@ -62,9 +62,9 @@ export function DirectExchange({
                     <MoonLoader className="mx-auto my-auto" loading={isLoadingSchedule} />
                     <p className="text-center">A carregar os horários</p>
                 </div>}
-                <Link to={getPath(config.paths.marketplace)}>
+                {/*<Link to={getPath(config.paths.marketplace)}>
                     <Button variant="icon" className="h-min w-min flex-grow bg-primary">Go to Marketplace</Button>
-                </Link>
+                </Link>*/}
         </div>
     </DirectExchangeContext.Provider>
 }

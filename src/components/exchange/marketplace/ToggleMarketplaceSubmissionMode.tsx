@@ -12,7 +12,7 @@ export const ToggleMarketplaceSubmissionMode = ({ }) => {
             checked={marketplaceToggled}
             onCheckedChange={setMarketplaceToggled}
         />
-        <Label htmlFor="marketplace-mode">Submissão para o marketplace</Label>
+        <Label htmlFor="marketplace-mode">Não tenho ninguém para trocar</Label>
     </div>
 
 }

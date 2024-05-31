@@ -16,8 +16,7 @@ const pages = [
   { path: getPath(config.paths.planner), location: 'Horários', element: TimeTableSchedulerPage, liquid: true },
   { path: getPath(config.paths.exchange), location: 'Exchange', element: ExchangePage, liquid: true },
   { path: getPath(config.paths.faqs), location: 'FAQs', element: FaqsPage, liquid: true },
-  { path: getPath(config.paths.notfound), location: 'NotFound', element: NotFoundPage, liquid: true },
-  { path: getPath(config.paths.marketplace), location: 'Marketplace', element: MarketplacePage, liquid: true },
+  { path: getPath(config.paths.notfound), location: 'NotFound', element: NotFoundPage, liquid: true }
 ]
 
 const redirects = [

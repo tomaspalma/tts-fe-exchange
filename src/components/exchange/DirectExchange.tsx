@@ -7,6 +7,7 @@ import { MoonLoader } from "react-spinners";
 import { ToggleMarketplaceSubmissionMode } from "./marketplace/ToggleMarketplaceSubmissionMode";
 import { DirectExchangeContext } from "../../contexts/DirectExchangeContext";
 import { DirectExchangeInfoButton } from "./buttons/DirectExchangeInfoButton";
+import { DirectExchangeHistoryButton } from "./DirectExchangeHistory";
 import { StudentScheduleContext } from "../../contexts/StudentScheduleContext";
 import { Link } from 'react-router-dom';
 import { config, getPath } from "../../utils/utils";
@@ -15,6 +16,7 @@ import { Button } from "../ui/button";
 type Props = {
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
     courseOptions: CourseOption[]
+
 }
 
 export function DirectExchange({
@@ -26,6 +28,8 @@ export function DirectExchange({
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const { schedule, isLoadingSchedule, isValidatingSchedule } = useContext(StudentScheduleContext);
     const [marketplaceToggled, setMarketplaceToggled] = useState(false);
+    const [selectedStudents, setSelectedStudents] = useState([]);
+
 
     if (error) {
         return <p>Error fetching schedule: {error.message}</p>;
@@ -40,6 +44,7 @@ export function DirectExchange({
         }}>
         <div className="flex justify-center flex-col space-y-4 mt-4">
             <DirectExchangeInfoButton />
+            <DirectExchangeHistoryButton />
             <SubmitDirectExchangeButton currentDirectExchange={currentDirectExchange} />
             <ToggleMarketplaceSubmissionMode />
             {!isLoadingSchedule ?
@@ -53,6 +58,8 @@ export function DirectExchange({
                                         setCourseOptions={setCourseOptions}
                                         uc={uc}
                                         key={uc.name}
+                                        setSelectedStudents={setSelectedStudents}
+                                        selectedStudents={selectedStudents}
                                     />
                                 )
                             }
@@ -62,9 +69,9 @@ export function DirectExchange({
                     <MoonLoader className="mx-auto my-auto" loading={isLoadingSchedule} />
                     <p className="text-center">A carregar os horários</p>
                 </div>}
-                <Link to={getPath(config.paths.marketplace)}>
+                {/*<Link to={getPath(config.paths.marketplace)}>
                     <Button variant="icon" className="h-min w-min flex-grow bg-primary">Go to Marketplace</Button>
-                </Link>
+                </Link>*/}
         </div>
     </DirectExchangeContext.Provider>
 }

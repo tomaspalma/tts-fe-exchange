@@ -1,13 +1,13 @@
 import React, { useState, useRef, Fragment, useEffect, useContext } from 'react';
 import { ArrowRightIcon, MagnifyingGlassIcon, FunnelIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
-import { Button} from '../components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../components/ui/tooltip';
+import { Button} from '../../ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../ui/tooltip';
 import { Dialog, Transition } from '@headlessui/react';
-import Alert, { AlertType } from '../components/planner/Alert';
+import Alert, { AlertType } from '../../planner/Alert';
 import classNames from 'classnames'
-import { SessionContext } from '../contexts/SessionContext';
-import { useMarketplaceExchange } from '../api/hooks/useMarketplaceExchange';
-import { getStudentData } from '../api/backend';
+import { SessionContext } from '../../../contexts/SessionContext';
+import { useMarketplaceExchange } from '../../../api/hooks/useMarketplaceExchange';
+import { getStudentData } from '../../../api/backend';
 
 const ExchangeDetail = ({ exchangeDetail }) => (
     <div className="flex flex-col space-y-2 w-full mb-2">

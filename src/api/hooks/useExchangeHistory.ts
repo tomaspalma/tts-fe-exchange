@@ -1,13 +1,13 @@
 import useSWR from "swr";
-import { getStudentSchedule, logout } from "../backend";
+import { getStudentHistory, logout } from "../backend";
 
-export function useSchedule(username, setLoggedIn) {
-    const studentSchedule = async (username: string) => {
+export function useExchangeHistory(setLoggedIn) {
+    const studentHistory = async (a_user) => {
         try {
-            const res = await getStudentSchedule(username);
+            const res = await getStudentHistory();
 
             if (!res.ok) {
-                if (res.status === 403 || res.status === 500) {
+                if (res.status === 403) {
                     await logout();
                     setLoggedIn(false);
                 }
@@ -19,7 +19,7 @@ export function useSchedule(username, setLoggedIn) {
         }
     };
 
-    const { isLoading, isValidating, data, error } = useSWR(username, studentSchedule, {
+    const { isLoading, isValidating, data, error } = useSWR("data", studentHistory, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });

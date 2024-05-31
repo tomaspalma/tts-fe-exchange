@@ -170,6 +170,10 @@ export const getMarketPlaceExchanges = async () => {
     return await apiRequest(`/marketplace_exchange/`, "GET", null);
 }
 
+export const getStudentHistory = async () => {
+    return await apiRequest(`/direct_exchange/history/`, "GET", null);
+}
+
 const api = {
     getMajors,
     getCourses,

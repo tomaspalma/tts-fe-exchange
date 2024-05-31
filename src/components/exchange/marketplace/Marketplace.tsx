@@ -8,28 +8,9 @@ import classNames from 'classnames'
 import { SessionContext } from '../../../contexts/SessionContext';
 import { useMarketplaceExchange } from '../../../api/hooks/useMarketplaceExchange';
 import { getStudentData } from '../../../api/backend';
-
-const ExchangeDetail = ({ exchangeDetail }) => (
-    <div className="flex flex-col space-y-2 w-full mb-2">
-        <div className="font-bold text-left">{exchangeDetail.course_unit}</div>
-        <div className="flex flex-row items-center space-x-2 w-full">
-            <input disabled type="text" className="w-1/2 disabled:cursor-default disabled:opacity-100 placeholder:text-black dark:placeholder:text-white border-gray-200 rounded-md" placeholder={exchangeDetail.old_class}></input>
-            <span>
-                <ArrowRightIcon className="h-5 w-full"></ArrowRightIcon>
-            </span>
-            <input disabled type="text" className="w-1/2 disabled:cursor-default disabled:opacity-100 placeholder:text-black dark:placeholder:text-white border-gray-200 rounded-md" placeholder={exchangeDetail.new_class}></input>
-        </div>
-    </div>
-);
-
-const Exchange = ({ exchange, studentData }) => (
-    <div className="border-2 border-gray-200 shadow-sm bg-white p-4 rounded-md w-1/4">
-        <h3 className="font-bold text-lg text-center">{studentData[exchange.issuer]}</h3>
-        {exchange.class_exchanges.map((exchangeDetail) => (
-            <ExchangeDetail key={exchangeDetail.course_unit} exchangeDetail={exchangeDetail} />
-        ))}
-    </div>
-);
+import { convertSigarraCoursesToTtsCourses } from '../../../utils/utils';
+import { useSchedule } from '../../../api/hooks/useSchedule';
+import { MarketplaceExchange } from './MarketplaceExchange';
 
 const SearchBar = ({ searchTerm, setSearchTerm, selectedUCs, setSelectedUCs })  => {
     const searchInputRef = useRef(null);
@@ -193,14 +174,31 @@ const MarketplacePage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const [studentData, setStudentData] = useState({});
+    /*
     const [selectedUCs, setSelectedUCs] = useState({
         'Compiladores': false,
         'Inteligência Artificial': false,
         'Computação Paralela e Distribuída': false,
         'Computação Gráfica': false
     });
+    */
+    const [selectedUCs, setSelectedUCs] = useState({});
+    const username = localStorage.getItem("username");
+    const { data: schedule, isLoading: isLoadingSchedule, isValidating: isValidatingSchedule } = useSchedule(username, loggedIn);
 
     const { data: marketplaceExchanges, isLoading, error } = useMarketplaceExchange(loggedIn);
+
+    useEffect(() => {
+        if (!isLoadingSchedule && !isValidatingSchedule && schedule) {
+            console.log('Schedule: ', schedule);
+            const ttsSchedule = schedule.reduce((acc, course) => {
+                const courseName = convertSigarraCoursesToTtsCourses([course])[0].course.info.name;
+                acc[courseName] = false;
+                return acc;
+            }, {});
+            setSelectedUCs(ttsSchedule);
+        }
+    }, [schedule, isLoadingSchedule, isValidatingSchedule]);
 
     useEffect(() => {
         if (marketplaceExchanges) {
@@ -242,10 +240,10 @@ const MarketplacePage = () => {
     return (
         <div className="p-4">
             <div className="flex flex-col items-center w-full justify-between space-y-4 border-2 border-gray-200 shadow-sm bg-white p-4 rounded-md">
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} selectedUCs={selectedUCs} setSelectedUCs={setSelectedUCs} />
+                <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} selectedUCs={selectedUCs} setSelectedUCs={setSelectedUCs} />
                 {filteredExchanges.length > 0 ? (
                     filteredExchanges.map((exchange) => (
-                        <Exchange key={exchange.id} exchange={exchange} studentData={studentData} />
+                        <MarketplaceExchange key={exchange.id} exchange={exchange} studentData={studentData} />
                     ))
                 ) : (
                     <div className="flex flex-col items-center w-full justify-between space-y-4">

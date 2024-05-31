@@ -37,6 +37,7 @@ const exchangeSubmittedMiddleware = (marketplaceToggled: boolean, dialogAction) 
 }
 
 export const SubmitDirectExchangeForm = ({ dialogAction, currentDirectExchange }: Props) => {
+    console.log("current direct exhcange is: ", currentDirectExchange);
     const [exchangeBeingProcessed, setExchangeBeingProcessed] = useState<boolean>(false);
     const [exchangeError, setExchangeError] = useState<string>();
     const [submitSuccessShow, setSubmitSuccessShow] = useState<boolean>(false);

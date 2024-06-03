@@ -65,6 +65,8 @@ export const SubmitDirectExchangeForm = ({ dialogAction, currentDirectExchange }
         });
     }
 
+    console.log("TESTE: ", currentDirectExchange.values())
+
     return <Form {...form}>
         {
             Array.from(currentDirectExchange.values()).map((exchange) => (

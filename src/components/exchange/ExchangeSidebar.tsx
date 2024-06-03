@@ -7,6 +7,7 @@ import { useSchedule } from "../../api/hooks/useSchedule";
 import { StudentScheduleContext } from "../../contexts/StudentScheduleContext";
 import { convertSigarraCoursesToTtsCourses } from "../../utils/utils";
 import { MarketplacePage } from "../../pages";
+import { useMarketplaceExchange } from "../../api/hooks/useMarketplaceExchange";
 
 type Props = {
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
@@ -27,8 +28,6 @@ export const ExchangeSidebar = ({
         isValidating: isValidatingSchedule
     } = useSchedule(username, setLoggedIn);
 
-    console.log(schedule);
-
     useEffect(() => {
         if (!isLoadingSchedule && !isValidatingSchedule) {
             const tts_schedule = []
@@ -45,7 +44,7 @@ export const ExchangeSidebar = ({
     }, [schedule, setCourseOptions, isLoadingSchedule, isValidatingSchedule])
 
     return (
-        <StudentScheduleContext.Provider value={{ schedule, isLoadingSchedule, isValidatingSchedule, courseOptions, originalSchedule: originalSchedule.current }}>
+        <StudentScheduleContext.Provider value={{ schedule, isLoadingSchedule, isValidatingSchedule, courseOptions, setCourseOptions, originalSchedule: originalSchedule.current }}>
             <div className="sidebar">
                 <Tabs defaultValue="direta" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">

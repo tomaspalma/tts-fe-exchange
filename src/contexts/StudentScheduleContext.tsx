@@ -6,7 +6,8 @@ interface StudentScheduleContextType {
     isLoadingSchedule: boolean,
     isValidatingSchedule: boolean,
     courseOptions: CourseOption[],
-    originalSchedule: CourseOption[]
+    setCourseOptions: React.Dispatch<React.SetStateAction<CourseOption[]>>
+    originalSchedule: CourseOption[],
 }
 
 export const StudentScheduleContext: Context<StudentScheduleContextType> = createContext({
@@ -14,5 +15,6 @@ export const StudentScheduleContext: Context<StudentScheduleContextType> = creat
     isLoadingSchedule: true,
     isValidatingSchedule: true,
     courseOptions: [],
-    originalSchedule: []
+    setCourseOptions: () => { },
+    originalSchedule: [],
 })

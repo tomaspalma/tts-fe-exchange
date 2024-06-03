@@ -1,12 +1,10 @@
 import useSWR from "swr";
-import { getMarketPlaceExchanges, logout} from "../backend";
+import { getMarketPlaceExchanges, logout } from "../backend";
 
 export function useMarketplaceExchange(setLoggedIn) {
     const fetchMarketplaceExchanges = async () => {
         try {
             const res = await getMarketPlaceExchanges();
-
-            // console.log(res);
 
             if (res.status === 403) {
                 await logout();
@@ -19,10 +17,7 @@ export function useMarketplaceExchange(setLoggedIn) {
         }
     };
 
-    const { isLoading, isValidating, data, error } = useSWR("data", fetchMarketplaceExchanges, {
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false
-    });
+    const { isLoading, isValidating, data, error } = useSWR("data", fetchMarketplaceExchanges, {});
 
     return {
         data,

@@ -8,7 +8,6 @@ import classNames from 'classnames'
 import { SessionContext } from '../../../contexts/SessionContext';
 import { useMarketplaceExchange } from '../../../api/hooks/useMarketplaceExchange';
 import { getStudentData } from '../../../api/backend';
-import { convertSigarraCoursesToTtsCourses } from '../../../utils/utils';
 import { useSchedule } from '../../../api/hooks/useSchedule';
 import { MarketplaceExchange } from './MarketplaceExchange';
 
@@ -174,31 +173,23 @@ const MarketplacePage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const [studentData, setStudentData] = useState({});
-    /*
-    const [selectedUCs, setSelectedUCs] = useState({
-        'Compiladores': false,
-        'Inteligência Artificial': false,
-        'Computação Paralela e Distribuída': false,
-        'Computação Gráfica': false
-    });
-    */
-    const [selectedUCs, setSelectedUCs] = useState({});
+    const [selectedUCs, setSelectedUCs] = useState({}); 
     const username = localStorage.getItem("username");
-    const { data: schedule, isLoading: isLoadingSchedule, isValidating: isValidatingSchedule } = useSchedule(username, loggedIn);
-
-    const { data: marketplaceExchanges, isLoading, error } = useMarketplaceExchange(loggedIn);
+    
+    const { data: studentSchedule } = useSchedule(username, loggedIn);
 
     useEffect(() => {
-        if (!isLoadingSchedule && !isValidatingSchedule && schedule) {
-            console.log('Schedule: ', schedule);
-            const ttsSchedule = schedule.reduce((acc, course) => {
-                const courseName = convertSigarraCoursesToTtsCourses([course])[0].course.info.name;
-                acc[courseName] = false;
-                return acc;
-            }, {});
-            setSelectedUCs(ttsSchedule);
+        if (studentSchedule) {
+            const newSelectedUCs = {};
+            studentSchedule.forEach(course => {
+                newSelectedUCs[course.name] = false;
+            });
+            setSelectedUCs(newSelectedUCs);
         }
-    }, [schedule, isLoadingSchedule, isValidatingSchedule]);
+    }, [studentSchedule]);
+    
+
+    const { data: marketplaceExchanges, isLoading, error } = useMarketplaceExchange(loggedIn);
 
     useEffect(() => {
         if (marketplaceExchanges) {

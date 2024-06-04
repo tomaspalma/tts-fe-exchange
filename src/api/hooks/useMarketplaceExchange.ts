@@ -6,18 +6,22 @@ export function useMarketplaceExchange(setLoggedIn) {
         try {
             const res = await getMarketPlaceExchanges();
 
+
             if (res.status === 403) {
                 await logout();
                 setLoggedIn(false);
             }
 
+            console.log("RESPONSE IS: ", res);
             return res;
         } catch (error) {
             return error;
         }
     };
 
-    const { isLoading, isValidating, data, error } = useSWR("data", fetchMarketplaceExchanges, {});
+    const { isLoading, isValidating, data, error } = useSWR("data", fetchMarketplaceExchanges);
+
+    console.log("DATA IS: ", data);
 
     return {
         data,

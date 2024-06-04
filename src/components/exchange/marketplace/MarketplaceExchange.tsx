@@ -16,10 +16,12 @@ export const MarketplaceExchange = ({ exchange, studentData }) => {
     const [previewingSchedule, setPreviewingSchedule] = useState<boolean>(false);
     const [storedSchedule, setStoredSchedule] = useState<CourseOption[]>(courseOptions);
 
-    console.log("Student data: ", studentData);
+    console.log("Current exchange is: ", exchange);
 
-    const currentDirectExchange: Map<string, ClassExchange> = (() => {
+    const currentDirectExchange = () => {
         const exchangesMap = new Map();
+
+        console.log("Exchanges: ", exchange.class_exchanges)
 
         for (const classExchange of exchange.class_exchanges) {
             console.log("class exchange is: ", classExchange);
@@ -28,22 +30,26 @@ export const MarketplaceExchange = ({ exchange, studentData }) => {
                 course_unit_id: classExchange.course_unit_id,
                 new_class: classExchange.old_class,
                 old_class: classExchange.new_class,
-                other_student: exchange.issuer.codigo
+                other_student: exchange.issuer?.codigo
             })
         }
 
         return exchangesMap;
-    })();
+    };
 
     const previewSchedule = async () => {
         setPreviewingSchedule(true);
+        const schedulesToPreview = new Map();
         for (const classExchange of exchange.class_exchanges) {
             const schedule = await getClassScheduleSigarra(classExchange.course_unit_id, classExchange.old_class);
-            setCourseOptions((prev) => ([
-                ...(prev.filter(schedule => schedule.course.info.acronym !== classExchange.course_unit_acronym)),
-                ...convertSigarraCoursesToTtsCourses(schedule),
-            ]));
+            schedulesToPreview.set(classExchange.course_unit_acronym, schedule);
+        }
 
+        for (const [currentAcronym, currentSchedule] of schedulesToPreview) {
+            setCourseOptions((prev) => ([
+                ...(prev.filter(schedule => schedule.course.info.acronym !== currentAcronym)),
+                ...convertSigarraCoursesToTtsCourses(currentSchedule),
+            ]));
         }
     }
 
@@ -86,7 +92,7 @@ export const MarketplaceExchange = ({ exchange, studentData }) => {
                             Após a submissão, tanto tu como o estudante com o qual especificaste na troca terão de clicar num link de confirmação para que a
                             troca se efetue de facto.
                         </DialogDescription>
-                        <SubmitDirectExchangeForm currentDirectExchange={currentDirectExchange} dialogAction={setOpen} />
+                        <SubmitDirectExchangeForm currentDirectExchange={currentDirectExchange()} dialogAction={setOpen} />
                     </DialogHeader>
                 </DialogContent>
             </Dialog>

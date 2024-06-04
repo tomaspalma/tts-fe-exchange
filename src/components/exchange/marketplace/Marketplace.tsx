@@ -183,6 +183,8 @@ const MarketplacePage = () => {
         isLoading
     } = useMarketplaceExchange(setLoggedIn);
 
+    console.log("Marketplace exchanges are: ", marketplaceExchanges);
+
     useEffect(() => {
         setFilteredExchanges(marketplaceExchanges && marketplaceExchanges.filter(exchange =>
             exchange.class_exchanges.some(detail =>
@@ -195,11 +197,6 @@ const MarketplacePage = () => {
         ));
     }, [studentData, marketplaceExchanges, searchTerm, selectedUCs])
 
-    // if (isLoadingMarketplace) {
-    //     return <div>Loading...</div>;
-    // }
-
-    console.log("Marketplace exchanges are: ", marketplaceExchanges);
 
     return (
         <div className="p-4">

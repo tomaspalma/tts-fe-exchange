@@ -1,3 +1,4 @@
+import { CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { MoonLoader } from "react-spinners";
@@ -33,8 +34,18 @@ export const DirectExchangeVerification = () => {
         directExchangeVerification(jwt);
     }, [jwt]);
 
-    return <>
+    return <div>
         <MoonLoader className="mx-auto" loading={isLoading} />
-        {!isLoading && verifiedResponse.verified ? <p>Successfully verified</p> : <p>Go home</p>}
-    </>
+        {!isLoading && verifiedResponse.verified
+            ? <div className="flex flex-col items-center">
+                <CheckCircleIcon className="h-20 w-20 text-green-700" />
+                <p className="text-2xl">Verificado com sucesso</p>
+            </div>
+            :
+            <div className="flex flex-col items-center">
+                <InformationCircleIcon className="h-20 w-20 text-blue-400"></InformationCircleIcon>
+                <p className="text-2xl">A troca já foi confirmada ou não foi possível confirmar</p>
+            </div>
+        }
+    </div>
 }

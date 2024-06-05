@@ -16,6 +16,7 @@ import { LogoutDialog } from '../auth/LogoutDialog'
 import { useContext } from 'react'
 import { SessionContext } from '../../contexts/SessionContext'
 import { ExportExchangeButton } from '../exchange/buttons/ExportExchangeButton'
+import { useIsAdmin } from "../../api/hooks/useIsAdmin"
 
 const navigation = [
   {
@@ -46,6 +47,17 @@ type Props = {
 
 const Header = ({ siteTitle, location }: Props) => {
   const { loggedIn, setLoggedIn } = useContext(SessionContext);
+
+  const {
+    data: isAdmin,
+    isLoading: isLoading,
+    isValidating: isValidating
+  } = useIsAdmin(localStorage.getItem("username"));
+
+  if(!isLoading && !isValidating){
+    console.log(isAdmin);
+  }
+
 
   return (
     <Disclosure

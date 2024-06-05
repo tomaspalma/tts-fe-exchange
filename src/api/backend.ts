@@ -174,6 +174,11 @@ export const getExportExchanges = async () => {
     return await fetch(BACKEND_URL + "/export/", { method: "GET", body: null, credentials: "include" });
 }
 
+export const getIsAdmin = async (username: string) => {
+    console.log("skldfjadslkfj");
+    return await apiRequest(`/is_admin/`, "GET", null);
+}
+
 const api = {
     getMajors,
     getCourses,

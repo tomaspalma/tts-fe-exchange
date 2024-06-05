@@ -4,10 +4,11 @@ import { getIsAdmin } from "../backend";
 export function useIsAdmin(username) {
     const isAdmin = async (username : string) => {
         try {
-            const res = await getIsAdmin(username);
+            const res = await getIsAdmin();
+            console.log("dsklfjewkljf3wiojd");
             
             if(res.ok) {
-                return true;
+                return res["admin"];
             } else {
                 return false;
             }
@@ -16,7 +17,7 @@ export function useIsAdmin(username) {
         }
     };
 
-    const { isLoading, isValidating, data, error } = useSWR(username, {
+    const { isLoading, isValidating, data, error } = useSWR(username, isAdmin, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });

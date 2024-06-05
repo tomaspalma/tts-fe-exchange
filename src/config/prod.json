@@ -7,7 +7,8 @@
     "exchange": "exchange",
     "faqs": "faqs",
     "notfound": "*",
-    "home": "home"
+    "home": "home",
+    "verifyDirectExchange": "verify_direct_exchange/:jwt"
   },
   "api": {
     "port": 443,

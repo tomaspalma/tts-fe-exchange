@@ -27,12 +27,16 @@ import { StudentScheduleContext } from "../../contexts/StudentScheduleContext"
 type props = {
     courseOptions: CourseOption[],
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>,
-    uc: ExchangeCourseUnit
+    uc: ExchangeCourseUnit,
+    setSelectedStudents: Dispatch<SetStateAction<any[]>>,
+    selectedStudents: any[],
 };
 
 export function DirectExchangeSelection({
     setCourseOptions,
-    uc
+    uc,
+    setSelectedStudents,
+    selectedStudents,
 }: props) {
     const { marketplaceToggled, currentDirectExchange, setCurrentDirectExchange } = useContext(DirectExchangeContext);
     const { originalSchedule } = useContext(StudentScheduleContext);
@@ -76,8 +80,6 @@ export function DirectExchangeSelection({
     if (error) {
         return <p>Error fetching schedule: {error.message}</p>;
     }
-
-    console.log(currentDirectExchange);
 
     return (
         <div className="flex flex-col w-full justify-between space-y-4 items-start border-2 border-gray-200 shadow-sm bg-white p-4 mb-4 rounded-md">
@@ -158,6 +160,8 @@ export function DirectExchangeSelection({
                         student={student}
                         setStudent={setStudent}
                         uc={uc}
+                        setSelectedStudents={setSelectedStudents}
+                        selectedStudents={selectedStudents}
                     />
                     : ""}
             </>
@@ -170,6 +174,7 @@ export function DirectExchangeSelection({
                         setCurrentDirectExchange(
                             new Map(currentDirectExchange.set(uc.acronym, {
                                 course_unit: uc.acronym,
+                                course_unit_id: uc.code,
                                 old_class: "",
                                 new_class: uc.class, // auth student class
                                 other_student: student

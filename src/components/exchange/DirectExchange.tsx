@@ -7,11 +7,14 @@ import { MoonLoader } from "react-spinners";
 import { ToggleMarketplaceSubmissionMode } from "./marketplace/ToggleMarketplaceSubmissionMode";
 import { DirectExchangeContext } from "../../contexts/DirectExchangeContext";
 import { DirectExchangeInfoButton } from "./buttons/DirectExchangeInfoButton";
+import { DirectExchangeHistoryButton } from "./DirectExchangeHistory";
 import { StudentScheduleContext } from "../../contexts/StudentScheduleContext";
+import { WarningSigarraSync } from "./WarningSigarraSync"
 
 type Props = {
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
     courseOptions: CourseOption[]
+
 }
 
 export function DirectExchange({
@@ -23,6 +26,8 @@ export function DirectExchange({
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const { schedule, isLoadingSchedule, isValidatingSchedule } = useContext(StudentScheduleContext);
     const [marketplaceToggled, setMarketplaceToggled] = useState(false);
+    const [selectedStudents, setSelectedStudents] = useState([]);
+
 
     if (error) {
         return <p>Error fetching schedule: {error.message}</p>;
@@ -37,12 +42,15 @@ export function DirectExchange({
         }}>
         <div className="flex justify-center flex-col space-y-4 mt-4">
             <DirectExchangeInfoButton />
+            <DirectExchangeHistoryButton />
             <SubmitDirectExchangeButton currentDirectExchange={currentDirectExchange} />
             <ToggleMarketplaceSubmissionMode />
             {!isLoadingSchedule ?
+                <>
+                <WarningSigarraSync noChanges={schedule["noChanges"]} />
                 <div>
                     {
-                        schedule.map((uc) => {
+                        schedule["schedule"].map((uc) => {
                             if (uc.type !== "T") {
                                 return (
                                     <DirectExchangeSelection
@@ -50,15 +58,21 @@ export function DirectExchange({
                                         setCourseOptions={setCourseOptions}
                                         uc={uc}
                                         key={uc.name}
+                                        setSelectedStudents={setSelectedStudents}
+                                        selectedStudents={selectedStudents}
                                     />
                                 )
                             }
                         })
                     }
-                </div> : <div className="mt-4">
+                </div> 
+                </>
+                : 
+                <div className="mt-4">
                     <MoonLoader className="mx-auto my-auto" loading={isLoadingSchedule} />
                     <p className="text-center">A carregar os horários</p>
-                </div>}
+                </div>
+            }
         </div>
     </DirectExchangeContext.Provider>
 }

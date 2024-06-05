@@ -173,6 +173,10 @@ export const verifyDirectExchange = async (jwt: string) => {
     return await apiRequest(`/verify_direct_exchange/${jwt}`, "POST", null);
 }
 
+export const getStudentHistory = async () => {
+    return await apiRequest(`/direct_exchange/history/`, "GET", null);
+}
+
 const api = {
     getMajors,
     getCourses,

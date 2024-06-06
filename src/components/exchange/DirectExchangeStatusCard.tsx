@@ -9,15 +9,20 @@ export const DirectExchangeStatusCard = ({
     exchange
 }: Props) => {
 
+    const username = localStorage.getItem("username");
     const class_exchanges = exchange.class_exchanges;
-    const text_color = exchange.status === "pending" ? "text-yellow-500" : "text-green-400";
+    const text_color = exchange.status === "pending" ? "text-orange-500" : "text-green-400";
     const text = exchange.status === "pending" ? "Pendente" : "Aceite";
+    const received = exchange.issuer === username ? "Enviado" : "Recebido";
 
     return <div className="flex flex-col w-full space-y-2 justify-around rounded-md border p-4 shadow-md">
-        <span className={text_color}>{text}</span>
+        <div className="flex justify-between">
+            <span className={text_color}>{text}</span>
+            <span>{received}</span>
+        </div>
         {
             class_exchanges.map((class_exchange) => (
-                <div className="flex justify-around p-2 border rounded-md" key={class_exchange.course_unit}>
+                <div className="flex justify-around p-2 space-x-4 border rounded-md" key={class_exchange.course_unit}>
                     <div className="flex flex-col space-y-2">
                         <span className="font-bold text-center">{class_exchange.course_unit}</span>
                         <div className="flex flex-end">

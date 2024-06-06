@@ -138,5 +138,6 @@ export type ExchangeCourseUnit = {
 export type DirectExchangeStatus = {
     id: int,
     class_exchanges: ClassExchange[],
+    issuer: string,
     status: string,
 }

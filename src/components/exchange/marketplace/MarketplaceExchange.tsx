@@ -41,9 +41,10 @@ export const MarketplaceExchange = ({ exchange, studentData }) => {
         setPreviewingSchedule(true);
         const schedulesToPreview = new Map();
         for (const classExchange of exchange.class_exchanges) {
-            const schedule = await getClassScheduleSigarra(classExchange.course_unit_id, classExchange.old_class);
+            const schedule = await getClassScheduleSigarra(classExchange.course_unit_id, classExchange.new_class);
             schedulesToPreview.set(classExchange.course_unit_acronym, schedule);
         }
+
 
         for (const [currentAcronym, currentSchedule] of schedulesToPreview) {
             setCourseOptions((prev) => ([
@@ -51,6 +52,7 @@ export const MarketplaceExchange = ({ exchange, studentData }) => {
                 ...convertSigarraCoursesToTtsCourses(currentSchedule),
             ]));
         }
+
     }
 
     const restoreSchedule = async () => {

@@ -13,7 +13,8 @@ import { DirectExchangeContext } from "../../contexts/DirectExchangeContext";
 
 type Props = {
     dialogAction: Dispatch<SetStateAction<boolean>>,
-    currentDirectExchange: Map<string, ClassExchange>
+    currentDirectExchange: Map<string, ClassExchange>,
+    marketplaceId?: number
 }
 
 const directExchangeAction = (dialogAction) => {
@@ -36,7 +37,7 @@ const exchangeSubmittedMiddleware = (marketplaceToggled: boolean, dialogAction) 
     marketplaceToggled ? marketplacePostSubmissionAction(dialogAction) : directExchangeAction(dialogAction);
 }
 
-export const SubmitDirectExchangeForm = ({ dialogAction, currentDirectExchange }: Props) => {
+export const SubmitDirectExchangeForm = ({ dialogAction, currentDirectExchange, marketplaceId = null }: Props) => {
     console.log("current direct exhcange is: ", currentDirectExchange);
     const [exchangeBeingProcessed, setExchangeBeingProcessed] = useState<boolean>(false);
     const [exchangeError, setExchangeError] = useState<string>();
@@ -49,7 +50,7 @@ export const SubmitDirectExchangeForm = ({ dialogAction, currentDirectExchange }
 
         setExchangeBeingProcessed(true);
 
-        submitDirectExchange(Array.from(currentDirectExchange.values()), marketplaceToggled).then(async (res) => {
+        submitDirectExchange(Array.from(currentDirectExchange.values()), marketplaceToggled, marketplaceId).then(async (res) => {
             setExchangeBeingProcessed(false);
             if (res.success) {
                 setSubmitSuccessShow(true);

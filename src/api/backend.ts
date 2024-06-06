@@ -137,10 +137,13 @@ export const logout = async () => {
 /**
  * Submit direct exchange request
 */
-export const submitDirectExchange = async (exchangeChoices: ClassExchange[], marketplaceSubmission: boolean) => {
+export const submitDirectExchange = async (exchangeChoices: ClassExchange[], marketplaceSubmission: boolean, marketplaceId: number | null) => {
     const formData = new FormData();
     for (const choice of exchangeChoices) {
         formData.append("exchangeChoices[]", JSON.stringify(choice));
+        if(marketplaceId !== null) {
+            formData.append("marketplaceId", String(marketplaceId));
+        }
     }
 
     const endpoint = marketplaceSubmission ? "/submit_marketplace_exchange/" : "/submit_direct_exchange/";

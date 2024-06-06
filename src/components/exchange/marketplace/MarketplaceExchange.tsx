@@ -94,7 +94,7 @@ export const MarketplaceExchange = ({ exchange, studentData }) => {
                             Após a submissão, tanto tu como o estudante com o qual especificaste na troca terão de clicar num link de confirmação para que a
                             troca se efetue de facto.
                         </DialogDescription>
-                        <SubmitDirectExchangeForm currentDirectExchange={currentDirectExchange()} dialogAction={setOpen} />
+                        <SubmitDirectExchangeForm currentDirectExchange={currentDirectExchange()} dialogAction={setOpen} marketplaceId={exchange.id}/>
                     </DialogHeader>
                 </DialogContent>
             </Dialog>

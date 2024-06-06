@@ -50,7 +50,7 @@ export function DirectExchange({
                 <WarningSigarraSync noChanges={schedule["noChanges"]} />
                 <div>
                     {
-                        schedule["schedule"].map((uc) => {
+                        schedule["schedule"]?.map((uc) => {
                             if (uc.type !== "T") {
                                 return (
                                     <DirectExchangeSelection

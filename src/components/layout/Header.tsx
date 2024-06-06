@@ -13,9 +13,11 @@ import {
 } from '@heroicons/react/24/outline'
 import { LoginDialog } from '../auth/LoginDialog'
 import { LogoutDialog } from '../auth/LogoutDialog'
-import { useContext } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { SessionContext } from '../../contexts/SessionContext'
 import { ExportExchangeButton } from '../exchange/buttons/ExportExchangeButton'
+import { useIsAdmin } from "../../api/hooks/useIsAdmin"
+import { getIsAdmin } from "../../api/backend";
 
 const navigation = [
   {
@@ -46,6 +48,22 @@ type Props = {
 
 const Header = ({ siteTitle, location }: Props) => {
   const { loggedIn, setLoggedIn } = useContext(SessionContext);
+  const [ isAdmin, setAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getIsAdmin();
+        setAdmin(res["admin"]);
+      } catch (error) {
+        setAdmin(false);
+      }
+    };
+
+    if(loggedIn)
+      fetchData();
+  });
+
 
   return (
     <Disclosure
@@ -95,7 +113,12 @@ const Header = ({ siteTitle, location }: Props) => {
 
 
                 <div className="hidden self-center md:inline-flex gap-x-4">
-                  <ExportExchangeButton />
+                  {
+                    isAdmin
+                    ? <ExportExchangeButton />
+                    : <></>
+                  }
+                  
                   {
                     loggedIn
                       ? <LogoutDialog />

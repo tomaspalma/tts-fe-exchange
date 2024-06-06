@@ -9,6 +9,9 @@ import { DirectExchangeContext } from "../../contexts/DirectExchangeContext";
 import { DirectExchangeInfoButton } from "./buttons/DirectExchangeInfoButton";
 import { DirectExchangeHistoryButton } from "./DirectExchangeHistory";
 import { StudentScheduleContext } from "../../contexts/StudentScheduleContext";
+import { Link } from 'react-router-dom';
+import { config, getPath } from "../../utils/utils";
+import { Button } from "../ui/button";
 import { WarningSigarraSync } from "./WarningSigarraSync"
 
 type Props = {

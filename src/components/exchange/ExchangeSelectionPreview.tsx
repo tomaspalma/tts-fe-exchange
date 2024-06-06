@@ -22,6 +22,8 @@ export const ExchangeSelectionPreview = ({
 }: Props) => {
     const { marketplaceToggled } = useContext(DirectExchangeContext);
 
+    console.log("exchange is: ", exchange)
+
     return <div className="flex w-full justify-around rounded-md border p-4 shadow-md">
         <div className="flex flex-col space-y-2">
             <span className="font-bold text-center">{exchange.course_unit}</span>

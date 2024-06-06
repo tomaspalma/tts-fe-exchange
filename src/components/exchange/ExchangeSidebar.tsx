@@ -6,6 +6,8 @@ import { SessionContext } from "../../contexts/SessionContext";
 import { useSchedule } from "../../api/hooks/useSchedule";
 import { StudentScheduleContext } from "../../contexts/StudentScheduleContext";
 import { convertSigarraCoursesToTtsCourses } from "../../utils/utils";
+import { MarketplacePage } from "../../pages";
+import { useMarketplaceExchange } from "../../api/hooks/useMarketplaceExchange";
 
 type Props = {
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
@@ -42,17 +44,19 @@ export const ExchangeSidebar = ({
     }, [schedule, setCourseOptions, isLoadingSchedule, isValidatingSchedule])
 
     return (
-        <StudentScheduleContext.Provider value={{ schedule, isLoadingSchedule, isValidatingSchedule, courseOptions, originalSchedule: originalSchedule.current }}>
+        <StudentScheduleContext.Provider value={{ schedule, isLoadingSchedule, isValidatingSchedule, courseOptions, setCourseOptions, originalSchedule: originalSchedule.current }}>
             <div className="sidebar">
                 <Tabs defaultValue="direta" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="direta">Troca direta</TabsTrigger>
-                        <TabsTrigger value="indireta">Troca indireta</TabsTrigger>
+                        <TabsTrigger value="indireta">Marketplace</TabsTrigger>
                     </TabsList>
                     <TabsContent value="direta">
                         <DirectExchange courseOptions={courseOptions} setCourseOptions={setCourseOptions} />
                     </TabsContent>
-                    <TabsContent value="indireta"></TabsContent>
+                    <TabsContent value="indireta">
+                        <MarketplacePage />
+                    </TabsContent>
                 </Tabs>
             </div>
         </StudentScheduleContext.Provider>

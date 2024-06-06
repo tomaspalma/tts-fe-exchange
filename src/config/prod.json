@@ -8,6 +8,7 @@
     "faqs": "faqs",
     "notfound": "*",
     "home": "home",
+    "marketplace": "exchange/marketplace",
     "verifyDirectExchange": "verify_direct_exchange/:jwt"
   },
   "api": {

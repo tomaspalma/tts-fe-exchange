@@ -6,7 +6,7 @@ export function useSchedule(username, setLoggedIn) {
         try {
             const res = await getStudentSchedule(username);
 
-            if (!res.ok) {
+            if (res.status !== undefined) {
                 if (res.status === 403) {
                     await logout();
                     setLoggedIn(false);

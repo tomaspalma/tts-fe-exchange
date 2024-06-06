@@ -12,6 +12,7 @@ import { StudentScheduleContext } from "../../contexts/StudentScheduleContext";
 import { Link } from 'react-router-dom';
 import { config, getPath } from "../../utils/utils";
 import { Button } from "../ui/button";
+import { WarningSigarraSync } from "./WarningSigarraSync"
 
 type Props = {
     setCourseOptions: Dispatch<SetStateAction<CourseOption[]>>
@@ -48,9 +49,11 @@ export function DirectExchange({
             <SubmitDirectExchangeButton currentDirectExchange={currentDirectExchange} />
             <ToggleMarketplaceSubmissionMode />
             {!isLoadingSchedule ?
+                <>
+                <WarningSigarraSync noChanges={schedule["noChanges"]} />
                 <div>
                     {
-                        schedule.map((uc) => {
+                        schedule["schedule"]?.map((uc) => {
                             if (uc.type !== "T") {
                                 return (
                                     <DirectExchangeSelection
@@ -65,13 +68,14 @@ export function DirectExchange({
                             }
                         })
                     }
-                </div> : <div className="mt-4">
+                </div> 
+                </>
+                : 
+                <div className="mt-4">
                     <MoonLoader className="mx-auto my-auto" loading={isLoadingSchedule} />
                     <p className="text-center">A carregar os horários</p>
-                </div>}
-                {/*<Link to={getPath(config.paths.marketplace)}>
-                    <Button variant="icon" className="h-min w-min flex-grow bg-primary">Go to Marketplace</Button>
-                </Link>*/}
+                </div>
+            }
         </div>
     </DirectExchangeContext.Provider>
 }

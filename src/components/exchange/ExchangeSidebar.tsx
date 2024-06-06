@@ -32,7 +32,7 @@ export const ExchangeSidebar = ({
         if (!isLoadingSchedule && !isValidatingSchedule) {
             const tts_schedule = []
 
-            schedule.forEach(course => {
+            schedule.schedule?.forEach(course => {
                 const convertedCourse = convertSigarraCoursesToTtsCourses([course]);
                 tts_schedule.push(convertedCourse[0]);
             })

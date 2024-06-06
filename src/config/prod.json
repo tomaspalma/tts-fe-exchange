@@ -8,7 +8,8 @@
     "faqs": "faqs",
     "notfound": "*",
     "home": "home",
-    "marketplace": "exchange/marketplace"
+    "marketplace": "exchange/marketplace",
+    "verifyDirectExchange": "verify_direct_exchange/:jwt"
   },
   "api": {
     "port": 443,

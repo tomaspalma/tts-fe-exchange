@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import { DirectExchangeStatus, ClassExchange } from "../../@types";
 import { Button } from "../ui/button";
@@ -16,14 +16,16 @@ export const DirectExchangeHistoryButton = () => {
         data: exchanges,
         isLoading: isLoadingHistory,
         isValidating: isValidatingHistory
-    } = useExchangeHistory(loggedIn);
+    } = useExchangeHistory(setLoggedIn);
     
-    let pending;
-    let accepted;
-    if(!isLoadingHistory) {
-        pending = exchanges.filter((exchange) => exchange.status === "pending");
-        accepted = exchanges.filter((exchange) => exchange.status === "accepted");
-   }
+    let [pending, setPending] = useState([]);
+    let [accepted, setAccepted] = useState([]);
+    useEffect(() => {
+        if(!isLoadingHistory && !isValidatingHistory) {
+            setPending(exchanges.filter((exchange) => exchange.status === "pending"));
+            setAccepted(exchanges.filter((exchange) => exchange.status === "accepted"));
+        }
+    }, [exchanges, setPending, setAccepted, isLoadingHistory, isValidatingHistory]);
 
     return <>
         <Dialog open={open} onOpenChange={setOpen}>

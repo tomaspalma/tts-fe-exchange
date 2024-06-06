@@ -6,11 +6,12 @@ export function useExchangeHistory(setLoggedIn) {
         try {
             const res = await getStudentHistory();
 
-            if (!res.ok) {
+            if (res.status !== undefined) {
                 if (res.status === 403) {
                     await logout();
                     setLoggedIn(false);
                 }
+                return [];
             }
 
             return res;

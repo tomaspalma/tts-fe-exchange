@@ -36,7 +36,7 @@ export const DirectExchangeVerification = () => {
 
     return <div>
         <MoonLoader className="mx-auto" loading={isLoading} />
-        {!isLoading && verifiedResponse.verified
+        {!isLoading ? verifiedResponse.verified
             ? <div className="flex flex-col items-center">
                 <CheckCircleIcon className="h-20 w-20 text-green-700" />
                 <p className="text-2xl">Verificado com sucesso</p>
@@ -46,6 +46,6 @@ export const DirectExchangeVerification = () => {
                 <InformationCircleIcon className="h-20 w-20 text-blue-400"></InformationCircleIcon>
                 <p className="text-2xl">A troca já foi confirmada ou não foi possível confirmar</p>
             </div>
-        }
+        : <></>}
     </div>
 }

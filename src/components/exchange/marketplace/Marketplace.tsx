@@ -176,7 +176,22 @@ const MarketplacePage = () => {
     const { loggedIn, setLoggedIn } = useContext(SessionContext);
     const [studentData, setStudentData] = useState({});
     const [selectedUCs, setSelectedUCs] = useState({});
+    const username = localStorage.getItem("username");
     const [filteredExchanges, setFilteredExchanges] = useState([]);
+    const { data: studentSchedule } = useSchedule(username, loggedIn);
+
+    useEffect(() => {
+        console.log("studentSchedule: ", studentSchedule);
+        if (studentSchedule) {
+            const newSelectedUCs = {};
+            studentSchedule.schedule.forEach(course => {
+                newSelectedUCs[course.name] = false;
+            });
+            setSelectedUCs(newSelectedUCs);
+        }
+    }, [studentSchedule]);
+
+    console.log("UCs: ", selectedUCs);
 
     const {
         data: marketplaceExchanges,

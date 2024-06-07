@@ -35,8 +35,8 @@ export const DirectExchangeStatusCard = ({
                         </div>
                     </div>
                     <div className="flex flex-col space-y-2 mr-0">
-                        <span className="font-bold">Estudante</span>
-                        <span>{class_exchange.other_student}</span>
+                        <span className="font-bold text-center">Estudante</span>
+                        <span className={class_exchange.other_student === username ? "underline" : ""}>{class_exchange.other_student}</span>
                     </div>
                 </div>
             ))

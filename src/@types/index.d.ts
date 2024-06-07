@@ -135,9 +135,18 @@ export type ExchangeCourseUnit = {
     professors
 }
 
+export type ClassExchangeStatus = {
+    course_unit: string,
+    course_unit_id: string,
+    old_class: string,
+    new_class: string,
+    accepted: boolean,
+    other_student: string // If the user didn't specify a student, it will be none
+}
+
 export type DirectExchangeStatus = {
     id: int,
-    class_exchanges: ClassExchange[],
+    class_exchanges: ClassExchangeStatus[],
     issuer: string,
     status: string,
 }

@@ -44,33 +44,33 @@ export function DirectExchange({
             setCurrentDirectExchange: setCurrentDirectExchange
         }}>
         <div className="flex justify-center flex-col space-y-4 mt-4">
-            <DirectExchangeInfoButton />
+            {/*<DirectExchangeInfoButton />*/}
             <DirectExchangeHistoryButton />
             <SubmitDirectExchangeButton currentDirectExchange={currentDirectExchange} />
             <ToggleMarketplaceSubmissionMode />
             {!isLoadingSchedule ?
                 <>
-                <WarningSigarraSync noChanges={schedule["noChanges"]} />
-                <div>
-                    {
-                        schedule["schedule"]?.map((uc) => {
-                            if (uc.type !== "T") {
-                                return (
-                                    <DirectExchangeSelection
-                                        courseOptions={courseOptions}
-                                        setCourseOptions={setCourseOptions}
-                                        uc={uc}
-                                        key={uc.name}
-                                        setSelectedStudents={setSelectedStudents}
-                                        selectedStudents={selectedStudents}
-                                    />
-                                )
-                            }
-                        })
-                    }
-                </div> 
+                    <WarningSigarraSync noChanges={schedule["noChanges"]} />
+                    <div>
+                        {
+                            schedule["schedule"]?.map((uc) => {
+                                if (uc.type !== "T") {
+                                    return (
+                                        <DirectExchangeSelection
+                                            courseOptions={courseOptions}
+                                            setCourseOptions={setCourseOptions}
+                                            uc={uc}
+                                            key={uc.name}
+                                            setSelectedStudents={setSelectedStudents}
+                                            selectedStudents={selectedStudents}
+                                        />
+                                    )
+                                }
+                            })
+                        }
+                    </div>
                 </>
-                : 
+                :
                 <div className="mt-4">
                     <MoonLoader className="mx-auto my-auto" loading={isLoadingSchedule} />
                     <p className="text-center">A carregar os horários</p>
